@@ -22,6 +22,7 @@ var SETTINGS = {
 
 var SUBS = "Subscribers";
 var OUTBOX = "Outbox";
+var IDEAS = "Ideas";
 
 /** Run once from the editor. Creates the sheets and a private unsubscribe secret. */
 function setup() {
@@ -38,6 +39,13 @@ function setup() {
     o.setFrozenRows(1);
     o.getRange("A1:E1").setFontWeight("bold");
   }
+  var i = ss.getSheetByName(IDEAS) || ss.insertSheet(IDEAS);
+  if (i.getLastRow() === 0) {
+    i.appendRow(["Received at", "Name", "Role", "Idea", "Status (type: approved)"]);
+    i.setFrozenRows(1);
+    i.getRange("A1:E1").setFontWeight("bold");
+    i.setColumnWidth(4, 480);
+  }
   var props = PropertiesService.getScriptProperties();
   if (!props.getProperty("SECRET")) props.setProperty("SECRET", Utilities.getUuid() + Utilities.getUuid());
   Logger.log("Setup complete.");
@@ -46,6 +54,7 @@ function setup() {
 /** Website form posts here. */
 function doPost(e) {
   var p = (e && e.parameter) || {};
+  if (p.type === "idea") return saveIdea(p);
   var email = String(p.email || "").trim().toLowerCase();
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email) || email.length > 254) return json({ ok: false, error: "invalid" });
 
@@ -71,6 +80,7 @@ function doPost(e) {
 /** Unsubscribe links land here: ?action=unsubscribe&email=...&t=... */
 function doGet(e) {
   var p = (e && e.parameter) || {};
+  if (p.action === "ideas") return json({ ideas: approvedIdeas() });
   if (p.action === "unsubscribe" && p.email && p.t === token(p.email)) {
     var sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(SUBS);
     var row = findRow(sheet, String(p.email).toLowerCase());
@@ -120,6 +130,33 @@ function sendNextPost() {
 
   outbox.getRange(r + 1, 4, 1, 2).setValues([[new Date(), subs.length]]);
   Logger.log("Sent '" + title + "' to " + subs.length + " subscribers.");
+}
+
+// ---------- ideas (community page) ----------
+/** Stores an idea as "pending". Change the Status cell to "approved" to show it on the idea wall. */
+function saveIdea(p) {
+  var idea = String(p.idea || "").trim().slice(0, 1000);
+  if (idea.length < 10) return json({ ok: false, error: "too short" });
+  var lock = LockService.getScriptLock();
+  lock.waitLock(10000);
+  try {
+    SpreadsheetApp.getActiveSpreadsheet().getSheetByName(IDEAS)
+      .appendRow([new Date(), clip(p.name), String(p.role || "").slice(0, 100), idea, "pending"]);
+  } finally { lock.releaseLock(); }
+  return json({ ok: true });
+}
+
+/** Approved ideas, newest first. Only name, role, idea and date are made public. */
+function approvedIdeas() {
+  var sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(IDEAS);
+  if (!sheet || sheet.getLastRow() < 2) return [];
+  return sheet.getRange(2, 1, sheet.getLastRow() - 1, 5).getValues()
+    .filter(function (r) { return String(r[4]).trim().toLowerCase() === "approved" && r[3]; })
+    .map(function (r) {
+      return { date: Utilities.formatDate(new Date(r[0]), "UTC", "yyyy-MM-dd"), name: String(r[1]), role: String(r[2]), idea: String(r[3]) };
+    })
+    .reverse()
+    .slice(0, 60);
 }
 
 // ---------- helpers ----------

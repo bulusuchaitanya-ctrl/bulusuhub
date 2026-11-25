@@ -49,26 +49,30 @@
     renderPosts();
   }
 
-  // ---------- home: published articles ----------
-  var artEl = document.getElementById("articles");
-  if (artEl) {
-    var artFilter = "All";
-    function renderArticles() {
-      var list = articles.filter(function (a) { return artFilter === "All" || a.track === artFilter; });
-      artEl.innerHTML = list.length ? list.map(function (a) {
+  // ---------- home: published articles + interviews ----------
+  function renderLinkList(elId, filterId, items) {
+    var el = document.getElementById(elId);
+    if (!el) return;
+    var f = "All";
+    function draw() {
+      var list = items.filter(function (a) { return f === "All" || a.track === f; });
+      el.innerHTML = list.length ? list.map(function (a) {
         var live = a.url && a.status !== "Forthcoming";
         var title = live
           ? '<a href="' + esc(a.url) + '" target="_blank" rel="noopener">' + esc(a.title) + ' <span class="arrow">&#8599;</span></a>'
           : esc(a.title);
-        return '<li class="item"><div class="meta"><span>' + esc(a.outlet) + '</span><span>' + esc(fmtDate(a.date)) + '</span>' +
+        return '<li class="item"><div class="meta"><span>' + esc(a.outlet) + '</span>' +
+          (a.date ? '<span>' + esc(fmtDate(a.date)) + '</span>' : '') +
           (a.track ? '<span class="track">' + esc(a.track) + '</span>' : '') +
           (!live ? '<span class="badge">' + esc(a.status || "Forthcoming") + '</span>' : '') + '</div>' +
           '<h3>' + title + '</h3></li>';
-      }).join("") : '<li class="empty">No articles in this track yet.</li>';
+      }).join("") : '<li class="empty">Nothing in this track yet.</li>';
     }
-    wireFilters("article-filters", function (v) { artFilter = v; renderArticles(); });
-    renderArticles();
+    wireFilters(filterId, function (v) { f = v; draw(); });
+    draw();
   }
+  renderLinkList("articles", "article-filters", articles);
+  renderLinkList("interviews", null, (DATA.interviews || []).slice().sort(byDateDesc));
 
   function wireFilters(id, onChange) {
     var box = document.getElementById(id);
@@ -102,7 +106,9 @@
       }).join("");
       postEl.innerHTML = '<div class="meta"><span>' + esc(fmtDate(p.date)) + '</span>' +
         (p.track ? '<span class="track">' + esc(p.track) + '</span>' : '') + '</div>' +
-        '<h1>' + esc(p.title) + '</h1><div class="body">' + html + '</div>';
+        '<h1>' + esc(p.title) + '</h1>' +
+        '<div class="byline"><img src="assets/cb.jpg" alt=""><span><strong>' + esc(CFG.AUTHOR || "") + '</strong></span></div>' +
+        '<div class="body">' + html + '</div>';
       var newer = posts[idx - 1], older = posts[idx + 1];
       var nav = document.getElementById("post-nav");
       if (nav) nav.innerHTML =
@@ -151,7 +157,7 @@
     });
     var closedAt = +(store("cb_popup_closed") || 0);
     var quiet = (CFG.POPUP_REPEAT_DAYS || 7) * 864e5;
-    var eligible = !store("cb_subscribed") && (Date.now() - closedAt > quiet);
+    var eligible = !store("cb_subscribed") && (Date.now() - closedAt > quiet) && !document.getElementById("idea-form");
     if (eligible) {
       var fired = false;
       function auto() { if (fired) return; fired = true; window.removeEventListener("scroll", onScroll); openModal(); }
@@ -164,6 +170,119 @@
       window.addEventListener("scroll", onScroll, { passive: true });
     }
   }
+
+
+  // ---------- discussions (Giscus / GitHub Discussions) ----------
+  var G = CFG.GISCUS || {};
+  var giscusReady = !!(G.repo && G.repoId && G.categoryId);
+  function giscusTheme() { return document.documentElement.getAttribute("data-theme") === "dark" ? "dark" : "light"; }
+  function mountGiscus(el, term) {
+    if (!el) return;
+    if (!giscusReady) {
+      el.innerHTML = '<div class="placeholder"><strong>Discussions open soon.</strong> Until then, share your thoughts through the idea form or by email at ' +
+        esc(CFG.EMAIL || "") + '.</div>';
+      return;
+    }
+    var frame = el.querySelector("iframe.giscus-frame");
+    if (frame) {
+      frame.contentWindow.postMessage({ giscus: { setConfig: { term: term } } }, "https://giscus.app");
+      return;
+    }
+    el.innerHTML = "";
+    var sc = document.createElement("script");
+    sc.src = "https://giscus.app/client.js";
+    var attrs = {
+      "data-repo": G.repo, "data-repo-id": G.repoId, "data-category": G.category || "General",
+      "data-category-id": G.categoryId, "data-mapping": "specific", "data-term": term, "data-strict": "1",
+      "data-reactions-enabled": "1", "data-emit-metadata": "0", "data-input-position": "top",
+      "data-theme": giscusTheme(), "data-lang": "en", "data-loading": "lazy"
+    };
+    Object.keys(attrs).forEach(function (k) { sc.setAttribute(k, attrs[k]); });
+    sc.crossOrigin = "anonymous"; sc.async = true;
+    el.appendChild(sc);
+  }
+  function syncGiscusTheme() {
+    Array.prototype.forEach.call(document.querySelectorAll("iframe.giscus-frame"), function (f) {
+      f.contentWindow.postMessage({ giscus: { setConfig: { theme: giscusTheme() } } }, "https://giscus.app");
+    });
+  }
+
+  // comments under a daily note
+  var postComments = document.getElementById("post-comments");
+  if (postComments) {
+    var pid = new URLSearchParams(location.search).get("p");
+    if (pid && posts.some(function (x) { return x.id === pid; })) mountGiscus(postComments, "note: " + pid);
+    else postComments.parentNode.style.display = "none";
+  }
+
+  // community rooms
+  var tabs = document.getElementById("room-tabs");
+  if (tabs) {
+    var topics = window.COMMUNITY_TOPICS || [];
+    var disc = document.getElementById("discussion");
+    var promptEl = document.getElementById("room-prompt");
+    function openRoom(i) {
+      var t = topics[i]; if (!t) return;
+      Array.prototype.forEach.call(tabs.children, function (b, j) { b.setAttribute("aria-selected", j === i ? "true" : "false"); });
+      promptEl.innerHTML = '<strong>' + esc(t.title) + '.</strong> ' + esc(t.prompt);
+      mountGiscus(disc, "room: " + t.id);
+      try { history.replaceState(null, "", "#room-" + t.id); } catch (e) {}
+    }
+    tabs.innerHTML = topics.map(function (t, i) {
+      return '<button class="room" role="tab" type="button" data-i="' + i + '">' + esc(t.title) + '</button>';
+    }).join("");
+    tabs.addEventListener("click", function (e) { var b = e.target.closest(".room"); if (b) openRoom(+b.getAttribute("data-i")); });
+    var start = 0, m = location.hash.match(/^#room-(.+)$/);
+    if (m) topics.forEach(function (t, i) { if (t.id === m[1]) start = i; });
+    openRoom(start);
+  }
+
+  // idea form (no login; stored in the Google Sheet, shown after approval)
+  var ideaForm = document.getElementById("idea-form");
+  if (ideaForm) {
+    var ideaNote = document.getElementById("idea-note");
+    ideaForm.addEventListener("submit", function (e) {
+      e.preventDefault();
+      var f = ideaForm.elements;
+      var idea = (f.idea.value || "").trim();
+      function say(msg, cls) { ideaNote.textContent = msg; ideaNote.className = "sub-note " + (cls || ""); }
+      if (idea.length < 10) return say("Please write at least a sentence.", "err");
+      if (f.company.value) return say("Thanks, your idea is in.", "ok");
+      if (!CFG.SUBSCRIBE_ENDPOINT) return say("The idea form is not connected yet. Please email " + (CFG.EMAIL || "me") + ".", "err");
+      var btn = ideaForm.querySelector("button"); btn.disabled = true; say("Sending...");
+      fetch(CFG.SUBSCRIBE_ENDPOINT, { method: "POST", mode: "no-cors", body: new URLSearchParams({
+        type: "idea", name: (f.name.value || "").trim(), role: (f.role.value || "").trim(), idea: idea }) })
+        .then(function () { say("Thank you. Your idea is in and will appear on the wall after a quick review.", "ok"); ideaForm.reset(); })
+        .catch(function () { say("Something went wrong. Please try again.", "err"); })
+        .then(function () { btn.disabled = false; });
+    });
+  }
+
+  // idea wall (approved ideas only)
+  var wall = document.getElementById("idea-wall");
+  if (wall) {
+    function drawWall(items) {
+      wall.innerHTML = items.length ? items.map(function (x) {
+        var who = (x.name || "Anonymous") + (x.role ? ", " + x.role : "");
+        return '<figure class="idea"><blockquote>' + esc(x.idea) + '</blockquote><figcaption>' + esc(who) +
+          (x.date ? ' <span>' + esc(fmtDate(x.date)) + '</span>' : '') + '</figcaption></figure>';
+      }).join("") : '<p class="empty">No ideas on the wall yet. Be the first to spark one above.</p>';
+    }
+    if (!CFG.SUBSCRIBE_ENDPOINT) drawWall([]);
+    else fetch(CFG.SUBSCRIBE_ENDPOINT + "?action=ideas")
+      .then(function (r) { return r.json(); })
+      .then(function (d) { drawWall((d && d.ideas) || []); })
+      .catch(function () { drawWall([]); });
+  }
+
+  // ---------- light / dark toggle ----------
+  var tbtn = document.getElementById("theme-toggle");
+  if (tbtn) tbtn.addEventListener("click", function () {
+    var next = document.documentElement.getAttribute("data-theme") === "dark" ? "light" : "dark";
+    document.documentElement.setAttribute("data-theme", next);
+    store("cb_theme", next);
+    syncGiscusTheme();
+  });
 
   // ---------- footer ----------
   var y = document.getElementById("year"); if (y) y.textContent = new Date().getFullYear();

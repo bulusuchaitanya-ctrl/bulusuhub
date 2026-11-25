@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Community | Chaiitanya Bulusu (CB)</title>
+<meta name="description" content="A community for plant leaders, engineers and builders to share ideas and discuss industrial AI and physical AI with Chaiitanya (Chaitanya) Bulusu, known as CB.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%2315181d'/%3E%3Ctext x='32' y='42' font-family='Georgia,serif' font-size='28' font-weight='700' fill='%23fbfaf7' text-anchor='middle'%3ECB%3C/text%3E%3C/svg%3E">
+<script>
+(function(){var t=null;try{t=localStorage.getItem("cb_theme");}catch(e){}
+if(t!=="light"&&t!=="dark"){t=(window.matchMedia&&matchMedia("(prefers-color-scheme: dark)").matches)?"dark":"light";}
+document.documentElement.setAttribute("data-theme",t);})();
+</script>
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="index.html" aria-label="Chaiitanya Bulusu, home"><span class="full">Chaiitanya Bulusu</span><span class="short">CB</span></a>
+    <nav class="nav">
+      <a href="index.html#daily" class="hide-sm">Writing</a>
+      <a href="community.html" aria-current="page">Community</a>
+      <button class="theme-toggle" type="button" id="theme-toggle" aria-label="Switch between light and dark mode" title="Light / dark">
+        <svg class="sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4.5"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
+        <svg class="moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
+      </button>
+      <a class="btn" href="#" data-open-subscribe>Subscribe</a>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <section class="intro intro-plain">
+    <div class="intro-text">
+      <div class="eyebrow">Community</div>
+      <h1>Where plant people and builders compare notes.</h1>
+      <p>Share an idea, ask a hard question, or tell a story from your plant. Two ways in: drop an idea in thirty seconds, or join a discussion room.</p>
+      <div class="steps">
+        <a class="step" href="#spark"><span class="step-n">1</span><span><strong>Spark an idea</strong><br>No sign-up needed</span></a>
+        <a class="step" href="#wall"><span class="step-n">2</span><span><strong>See the idea wall</strong><br>What others are thinking</span></a>
+        <a class="step" href="#rooms"><span class="step-n">3</span><span><strong>Join a discussion</strong><br>Reply, react, debate</span></a>
+      </div>
+    </div>
+  </section>
+
+  <!-- 1. Spark an idea -->
+  <section class="block" id="spark">
+    <div class="block-head"><h2>Spark an idea</h2></div>
+    <p class="lede">A problem you keep seeing, a fix that worked, a question nobody answers. I read every one. The best ones go on the idea wall and become daily notes.</p>
+    <form class="idea-form" id="idea-form" novalidate>
+      <div class="row">
+        <label><span>Your name</span><input type="text" name="name" maxlength="80" placeholder="e.g. Priya S." autocomplete="name"></label>
+        <label><span>Role and industry <span class="opt">(optional)</span></span><input type="text" name="role" maxlength="100" placeholder="e.g. Reliability lead, cement"></label>
+      </div>
+      <label><span>Your idea or question</span><textarea name="idea" rows="4" maxlength="1000" placeholder="What should industrial AI be solving that it is not?" required></textarea></label>
+      <input type="text" name="company" class="hp" tabindex="-1" autocomplete="off" aria-hidden="true">
+      <div class="row-end">
+        <span class="sub-note" id="idea-note">Ideas appear on the wall after a quick review.</span>
+        <button class="btn" type="submit">Share idea</button>
+      </div>
+    </form>
+  </section>
+
+  <!-- 2. Idea wall -->
+  <section class="block" id="wall">
+    <div class="block-head"><h2>Idea wall</h2></div>
+    <div class="idea-wall" id="idea-wall"><p class="empty">Loading ideas...</p></div>
+  </section>
+
+  <!-- 3. Discussion rooms -->
+  <section class="block" id="rooms">
+    <div class="block-head"><h2>Discussion rooms</h2></div>
+    <div class="rooms" id="room-tabs" role="tablist"></div>
+    <div class="room-prompt" id="room-prompt"></div>
+    <div class="discussion" id="discussion"></div>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <span>&copy; <span id="year"></span> Chaiitanya Bulusu (CB)</span>
+    <span>
+      <a href="mailto:cb@bulusuhub.com">Email</a>
+      <a href="https://www.linkedin.com/in/bulusuchaiitanya" target="_blank" rel="noopener">LinkedIn</a>
+      <a href="index.html">Writing</a>
+    </span>
+  </div>
+</footer>
+
+<div class="modal" id="subscribe-modal" role="dialog" aria-modal="true" aria-labelledby="sub-title">
+  <div class="modal-card">
+    <button class="close" type="button" aria-label="Close">&times;</button>
+    <div class="eyebrow">Daily notes</div>
+    <h2 id="sub-title">Get one sharp note on industrial AI, every day.</h2>
+    <p>What works on the plant floor, what stalls, and why. No vendor pitches.</p>
+    <form class="sub-form" data-source="popup" novalidate>
+      <input type="email" name="email" placeholder="Your email address" aria-label="Email address" autocomplete="email" required>
+      <input type="text" name="company" class="hp" tabindex="-1" autocomplete="off" aria-hidden="true">
+      <button class="btn" type="submit">Subscribe</button>
+    </form>
+    <div class="sub-note">Free. Unsubscribe anytime.</div>
+  </div>
+</div>
+
+<script src="data/content.js"></script>
+<script src="assets/site.js"></script>
+</body>
+</html>
