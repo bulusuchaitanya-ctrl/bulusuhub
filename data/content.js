@@ -27,7 +27,7 @@
 window.SITE_CONFIG = {
   SUBSCRIBE_ENDPOINT: "",          // e.g. "https://script.google.com/macros/s/XXXX/exec"
   AUTHOR: "Chaiitanya Bulusu",
-  EMAIL: "cb@bulusuhub.com",
+  EMAIL: "bulusu@bulusuhub.com",
   LINKEDIN: "https://www.linkedin.com/in/bulusuchaiitanya",
   POPUP_DELAY_SECONDS: 25,          // popup appears after this many seconds...
   POPUP_SCROLL_PERCENT: 50,         // ...or after scrolling this far, whichever comes first

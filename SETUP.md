@@ -55,6 +55,6 @@ New ideas land in the **Ideas** tab of the Google Sheet with Status `pending`. T
 ## Limits to know
 - **Sending limit.** Free Google accounts can only send a limited number of emails per day from Apps Script (around 100 recipients per day; check Google's "Apps Script quotas" page for the current figure). `sendNextPost` checks the quota first and sends nothing if your list is larger than what is left that day.
 - **When you outgrow it:** download the Subscribers tab as CSV (File → Download → CSV) and import the active rows into a newsletter service with a large free tier (for example Substack). The Google Sheet stays your master copy.
-- **Sender address.** Emails go out from the Google account that owns the script, with replies directed to cb@bulusuhub.com.
+- **Sender address.** Emails go out from the Google account that owns the script, with replies directed to bulusu@bulusuhub.com.
 - **Discussions need a GitHub login.** Many plant engineers do not have one. That is why the idea form needs no login at all. If the community grows, a LinkedIn group can run alongside.
 - **Consent.** Only email people who subscribed through the form. Never add contacts by hand from LinkedIn or business cards.

@@ -13,7 +13,7 @@
 
 var SETTINGS = {
   FROM_NAME: "Chaiitanya Bulusu",
-  REPLY_TO: "cb@bulusuhub.com",
+  REPLY_TO: "bulusu@bulusuhub.com",
   SITE_URL: "https://bulusuhub.com",
   // Required by US anti-spam law (CAN-SPAM) in every commercial email: a valid postal address.
   // A PO box or a registered business address is fine.
