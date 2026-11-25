@@ -86,6 +86,31 @@
     });
   }
 
+  // ---------- home: latest + counts ----------
+  var hn = document.getElementById("home-notes");
+  if (hn) hn.innerHTML = posts.slice(0, 3).map(function (p) {
+    return '<li class="item"><div class="meta"><span>' + esc(fmtDate(p.date)) + '</span>' + (p.track ? '<span class="track">' + esc(p.track) + '</span>' : '') +
+      '</div><h3><a href="post.html?p=' + encodeURIComponent(p.id) + '">' + esc(p.title) + '</a></h3></li>';
+  }).join("") || '<li class="empty">First note coming soon.</li>';
+  var ha = document.getElementById("home-articles");
+  if (ha) ha.innerHTML = articles.filter(function (a) { return a.url && a.status !== "Forthcoming"; }).slice(0, 4).map(function (a) {
+    return '<li class="item"><div class="meta"><span>' + esc(a.outlet) + '</span><span>' + esc(fmtDate(a.date)) + '</span></div>' +
+      '<h3><a href="' + esc(a.url) + '" target="_blank" rel="noopener">' + esc(a.title) + ' <span class="arrow">&#8599;</span></a></h3></li>';
+  }).join("");
+  var sp = document.getElementById("stat-pieces");
+  if (sp) sp.textContent = articles.filter(function (a) { return a.url && a.status !== "Forthcoming"; }).length + (DATA.interviews || []).filter(function (a) { return a.url; }).length;
+
+  // ---------- home: speaking photos ----------
+  var gal = document.getElementById("speaking-gallery");
+  var photos = window.SPEAKING_PHOTOS || [];
+  if (gal && photos.length) {
+    gal.innerHTML = photos.map(function (ph) {
+      return '<figure><img src="' + esc(ph.src) + '" alt="' + esc(ph.caption || "Speaking") + '" loading="lazy">' +
+        (ph.caption ? '<figcaption>' + esc(ph.caption) + '</figcaption>' : '') + '</figure>';
+    }).join("");
+    gal.hidden = false;
+  }
+
   // ---------- post page ----------
   var postEl = document.getElementById("post");
   if (postEl) {

@@ -43,6 +43,17 @@ window.SITE_CONFIG = {
   }
 };
 
+// Speaking photos shown on the home page (Speaking section). The strip stays hidden while this list is empty.
+// Put the image files in assets/speaking/ and list them here, newest first.
+window.SPEAKING_PHOTOS = [
+  { src: "assets/speaking/thakur-2022-audience.jpg", caption: "Speaker, Converting Innovation to Start-up, IIF and Thakur College of Engineering, Mumbai, 2022" },
+  { src: "assets/speaking/spjain-lecture.jpg", caption: "Guest lecture on B2B go-to-market and segmentation, SP Jain School of Global Management, Mumbai" },
+  { src: "assets/speaking/machinemaker-pune-2023.jpg", caption: "Panelist, Machine Maker knowledge session on manufacturing innovation, PCCoE Pune, 2023" },
+  { src: "assets/speaking/thakur-2022-panel.jpg", caption: "On the dais, IIF Western Region and Greater Mumbai Chapter, 2022" },
+  { src: "assets/speaking/spjain-cohort.jpg", caption: "With the Graduate Certificate in Global Management cohort, SP Jain, Mumbai" },
+  { src: "assets/speaking/ahmedabad-2019-keynote.jpg", caption: "Keynote on Pharma 4.0, Ahmedabad University with UC San Diego, 2019" }
+];
+
 // Discussion rooms on the Community page. Add, rename or remove freely.
 // "id" must stay the same once people have posted in a room.
 window.COMMUNITY_TOPICS = [
@@ -158,10 +169,10 @@ If that is useful to you, subscribe and it will arrive in your inbox.`
     {
       title: "Why Industrial AI Pilots Stall in Indian Plants After the Model Works",
       outlet: "Express Computer",
-      date: "",
+      date: "2026-11",
       track: "Industrial AI",
-      url: "",
-      status: "Forthcoming"
+      url: "https://www.expresscomputer.in/guest-blogs/why-industrial-ai-pilots-stall-in-indian-plants-after-the-model-works/141556/",
+      status: "Published"
     },
     {
       title: "Measure Prescriptions Acted On, Not Alerts Sent",
@@ -191,6 +202,46 @@ If that is useful to you, subscribe and it will arrive in your inbox.`
 
   // Interviews and features about you (same fields as articles)
   interviews: [
+    {
+      title: "Interview with Chaitanya Bulusu: Founder (Stealth Start-up)",
+      outlet: "Entrepreneur Mindz",
+      date: "2020-04-12",
+      track: "",
+      url: "https://entrepreneurmindz.com/interview-with-chaitanya-bulusu-founder/",
+      status: "Published"
+    },
+    {
+      title: "Chaitanya Bulusu Explains Why Cranes Need a Purpose-Built AI Shield",
+      outlet: "Alloy Targets",
+      date: "2026-08-25",
+      track: "Industrial AI",
+      url: "https://alloytargets.com/chaitanya-bulusu-explains-why-cranes-need-a-purpose-built-ai-shiel/",
+      status: "Published"
+    },
+    {
+      title: "From Data to Decisions: Chaiitanya Bulusu on Overcoming the Dashboard Delusion",
+      outlet: "Yonkers Observer",
+      date: "2025-07-15",
+      track: "Industrial AI",
+      url: "https://yonkersobserver.com/from-data-to-decisions-chaiitanya-bulusu-on-overcoming-the-dashboard-delusion/",
+      status: "Published"
+    },
+    {
+      title: "Mumbai Startup Pather Launches a Made-in-India Automated Sterilizing Appliance",
+      outlet: "Healthy Soch",
+      date: "2020-06-19",
+      track: "",
+      url: "https://healthysoch.com/general/mumbai-based-technology-startup-launches-a-made-in-india-safe-compact-automated-sterilizing-appliance-for-hospital-home-use/",
+      status: "Published"
+    },
+    {
+      title: "Automotive Engineering Show Highlights Smart Factories",
+      outlet: "The Machinist",
+      date: "2015-07-21",
+      track: "",
+      url: "https://www.themachinist.in/news/1192/automotive-engineering-leads-smart-automotive-factories-future/page/2",
+      status: "Published"
+    },
     {
       title: "Interview: Redefining Industrial Operations with Agentic AI",
       outlet: "TechBullion",
