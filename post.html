@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chaiitanya Bulusu</title>
+<meta name="description" content="A daily note on industrial AI and physical AI by Chaiitanya Bulusu.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%2315181d'/%3E%3Ctext x='32' y='42' font-family='Georgia,serif' font-size='28' font-weight='700' fill='%23fbfaf7' text-anchor='middle'%3ECB%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="index.html">Chaiitanya Bulusu</a>
+    <nav class="nav">
+      <a href="index.html#daily">Daily</a>
+      <a href="index.html#articles-section" class="hide-sm">Articles</a>
+      <a class="btn" href="#" data-open-subscribe>Subscribe</a>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap">
+  <article class="post" id="post"></article>
+
+  <div class="post-end">
+    <h3>Get the next note in your inbox</h3>
+    <p>One short note a day on industrial AI and physical AI. Free, unsubscribe anytime.</p>
+    <form class="sub-form" data-source="post-end" novalidate>
+      <input type="email" name="email" placeholder="Your email address" aria-label="Email address" autocomplete="email" required>
+      <input type="text" name="company" class="hp" tabindex="-1" autocomplete="off" aria-hidden="true">
+      <button class="btn" type="submit">Subscribe</button>
+    </form>
+    <div class="sub-note"></div>
+  </div>
+
+  <nav class="post-nav" id="post-nav"></nav>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <span>&copy; <span id="year"></span> Chaiitanya Bulusu</span>
+    <span>
+      <a href="mailto:cb@bulusuhub.com">Email</a>
+      <a href="https://www.linkedin.com/in/bulusuchaiitanya" target="_blank" rel="noopener">LinkedIn</a>
+      <a href="index.html">All writing</a>
+    </span>
+  </div>
+</footer>
+
+<div class="modal" id="subscribe-modal" role="dialog" aria-modal="true" aria-labelledby="sub-title">
+  <div class="modal-card">
+    <button class="close" type="button" aria-label="Close">&times;</button>
+    <div class="eyebrow">Daily notes</div>
+    <h2 id="sub-title">Get one sharp note on industrial AI, every day.</h2>
+    <p>What works on the plant floor, what stalls, and why. No vendor pitches.</p>
+    <form class="sub-form" data-source="popup" novalidate>
+      <input type="email" name="email" placeholder="Your email address" aria-label="Email address" autocomplete="email" required>
+      <input type="text" name="company" class="hp" tabindex="-1" autocomplete="off" aria-hidden="true">
+      <button class="btn" type="submit">Subscribe</button>
+    </form>
+    <div class="sub-note">Free. Unsubscribe anytime.</div>
+  </div>
+</div>
+
+<script src="data/content.js"></script>
+<script src="assets/site.js"></script>
+</body>
+</html>

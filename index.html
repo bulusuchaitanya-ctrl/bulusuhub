@@ -3,32 +3,98 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Chaiitanya Bulusu | Industrial AI and Physical AI</title>
-<meta name="description" content="Chaiitanya Bulusu helps heavy-industry plants and industrial AI companies move AI from pilot to plant-wide scale.">
-<style>
-  :root { --ink:#14181f; --muted:#5b6472; --accent:#c2410c; --bg:#fafaf7; }
-  * { box-sizing:border-box; margin:0; padding:0; }
-  body { font-family: Georgia, "Times New Roman", serif; background:var(--bg); color:var(--ink);
-         min-height:100vh; display:flex; align-items:center; justify-content:center; padding:2rem; }
-  main { max-width:640px; }
-  .tag { font-family: Arial, sans-serif; font-size:.8rem; letter-spacing:.15em; text-transform:uppercase; color:var(--accent); }
-  h1 { font-size:2.6rem; line-height:1.15; margin:.6rem 0 1rem; }
-  p { font-size:1.15rem; line-height:1.6; color:var(--muted); margin-bottom:1.2rem; }
-  .links { font-family: Arial, sans-serif; display:flex; gap:1.5rem; flex-wrap:wrap; margin-top:1.5rem; }
-  a { color:var(--ink); font-weight:bold; text-decoration:none; border-bottom:2px solid var(--accent); padding-bottom:2px; }
-  a:hover { color:var(--accent); }
-</style>
+<title>Chaiitanya Bulusu | Writing on Industrial AI and Physical AI</title>
+<meta name="description" content="Daily notes and published articles by Chaiitanya Bulusu on industrial AI, physical AI, and getting AI from pilot to plant-wide scale.">
+<meta property="og:title" content="Chaiitanya Bulusu | Writing on Industrial AI and Physical AI">
+<meta property="og:description" content="Daily notes and published articles on industrial AI and physical AI.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://bulusuhub.com/">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%2315181d'/%3E%3Ctext x='32' y='42' font-family='Georgia,serif' font-size='28' font-weight='700' fill='%23fbfaf7' text-anchor='middle'%3ECB%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="assets/style.css">
 </head>
 <body>
-<main>
-  <div class="tag">Industrial AI &middot; Physical AI</div>
-  <h1>Chaiitanya Bulusu</h1>
-  <p>I help heavy-industry plants and industrial AI companies get AI out of the pilot and running across the whole plant.</p>
-  <p>Full site launching soon: writing, work, advisory and speaking.</p>
-  <div class="links">
-    <a href="mailto:cb@bulusuhub.com">cb@bulusuhub.com</a>
-    <a href="https://www.linkedin.com/in/bulusuchaiitanya" target="_blank" rel="noopener">LinkedIn</a>
+
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="index.html">Chaiitanya Bulusu</a>
+    <nav class="nav">
+      <a href="#daily">Daily</a>
+      <a href="#articles-section" class="hide-sm">Articles</a>
+      <a class="btn" href="#" data-open-subscribe>Subscribe</a>
+    </nav>
   </div>
+</header>
+
+<main class="wrap">
+
+  <section class="intro">
+    <div class="eyebrow">Industrial AI &middot; Physical AI</div>
+    <h1>Notes from the gap between the AI pilot and the plant floor.</h1>
+    <p>One short note a day on what makes industrial AI work at scale in cement, steel, chemicals, pulp and tyre plants, and on physical AI as it moves into real factories.</p>
+    <div class="sub-inline">
+      <form class="sub-form" data-source="hero" novalidate>
+        <input type="email" name="email" placeholder="Your email address" aria-label="Email address" autocomplete="email" required>
+        <input type="text" name="company" class="hp" tabindex="-1" autocomplete="off" aria-hidden="true">
+        <button class="btn" type="submit">Subscribe</button>
+      </form>
+      <div class="sub-note">Free. One email a day. Unsubscribe anytime.</div>
+    </div>
+  </section>
+
+  <section class="block" id="daily">
+    <div class="block-head">
+      <h2>Daily notes</h2>
+      <div class="filters" id="post-filters">
+        <button class="chip" data-v="All" aria-pressed="true">All</button>
+        <button class="chip" data-v="Industrial AI" aria-pressed="false">Industrial AI</button>
+        <button class="chip" data-v="Physical AI" aria-pressed="false">Physical AI</button>
+      </div>
+    </div>
+    <ul class="list" id="posts"></ul>
+    <button class="btn btn-ghost more" id="posts-more" type="button" style="display:none">Show all notes</button>
+  </section>
+
+  <section class="block" id="articles-section">
+    <div class="block-head">
+      <h2>Published articles</h2>
+      <div class="filters" id="article-filters">
+        <button class="chip" data-v="All" aria-pressed="true">All</button>
+        <button class="chip" data-v="Industrial AI" aria-pressed="false">Industrial AI</button>
+        <button class="chip" data-v="Physical AI" aria-pressed="false">Physical AI</button>
+      </div>
+    </div>
+    <ul class="list" id="articles"></ul>
+  </section>
+
 </main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <span>&copy; <span id="year"></span> Chaiitanya Bulusu</span>
+    <span>
+      <a href="mailto:cb@bulusuhub.com">Email</a>
+      <a href="https://www.linkedin.com/in/bulusuchaiitanya" target="_blank" rel="noopener">LinkedIn</a>
+      <a href="#" data-open-subscribe>Subscribe</a>
+    </span>
+  </div>
+</footer>
+
+<div class="modal" id="subscribe-modal" role="dialog" aria-modal="true" aria-labelledby="sub-title">
+  <div class="modal-card">
+    <button class="close" type="button" aria-label="Close">&times;</button>
+    <div class="eyebrow">Daily notes</div>
+    <h2 id="sub-title">Get one sharp note on industrial AI, every day.</h2>
+    <p>What works on the plant floor, what stalls, and why. No vendor pitches.</p>
+    <form class="sub-form" data-source="popup" novalidate>
+      <input type="email" name="email" placeholder="Your email address" aria-label="Email address" autocomplete="email" required>
+      <input type="text" name="company" class="hp" tabindex="-1" autocomplete="off" aria-hidden="true">
+      <button class="btn" type="submit">Subscribe</button>
+    </form>
+    <div class="sub-note">Free. Unsubscribe anytime.</div>
+  </div>
+</div>
+
+<script src="data/content.js"></script>
+<script src="assets/site.js"></script>
 </body>
 </html>
